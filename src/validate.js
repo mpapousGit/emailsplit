@@ -6,27 +6,23 @@
      checkFile: function(file, className) {
       fs.readFile(file, function(err, file) {
         if (err) {
-          console.log("File is not valid");
-        } else {
-          console.log("File is valid");
+          console.log("\n File not found or can't be open \n");
         }
       });
     },
-    checkClass : function(fileName, className, callback) {
+    checkClass : function(fileName, className) {
       fs.readFile(fileName, function(err, content) {
         if (!err) {
-          return this.split(content, className, callback);
+          return this.openFile(content, className);
+        } else {
+          throw (err);
         }
       }.bind(this));
     },
-    split: function(content, className) {
-      var self = this;
+    openFile: function(content, className) {
       var $ = cheerio.load(content);
-      if ($(className)) {
-        console.log(""+ content );
-
-      } else {
-        console.log("not here");
+      if (! $(className).length) {
+        console.log("\n Error: Class " + className + " not found in file  \n");
       }
     }
   }

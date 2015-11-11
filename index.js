@@ -2,7 +2,7 @@
 
 (function() {
   'use strict';
-  var exec = require('child_process').exec;
+  //var exec = require('child_process').exec;
   var async = require('async');
   var errors = false;
   var args = [].concat(process.argv);
@@ -21,11 +21,25 @@
 
     // validate.do(fileName, className);
 
+  
     async.series([
-      function(callback) {
+       function(callback) {
         validate.checkFile(fileName);
-        validate.checkClass(fileName, className, function() {});
-        //callback(null, 1);
+        validate.checkClass(fileName, className);
+        callback(null, 1);
+      },
+      function(callback) {
+        clean.do('./export/blocks/*.html');
+        clean.do('./export/images/*.png');
+        callback(null, 2);
+      },
+      function(callback) {
+        splitter.do(fileName, className, function() {});
+        callback(null, 3);
+      },
+      function(callback) {
+        renderer.do();
+        callback(null, 4);
       }
     ]);
   }
