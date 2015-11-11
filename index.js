@@ -23,18 +23,9 @@
 
     async.series([
       function(callback) {
-        clean.do('./export/blocks/*.html');
-        clean.do('./export/images/*.png');
-        callback(null, 1);
-      },
-      function(callback) {
-        splitter.do(fileName, className, function() {});
-        callback(null, 2);
-      },
-      function(callback) {
-        setTimeout(function() { renderer.do(); }, 200);
-        //Add delay to stop phantomJS from running too early
-        callback(null, 3);
+        validate.checkFile(fileName);
+        validate.checkClass(fileName, className, function() {});
+        //callback(null, 1);
       }
     ]);
   }
